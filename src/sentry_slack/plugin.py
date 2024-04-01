@@ -5,6 +5,7 @@ sentry_slack.plugin
 :copyright: (c) 2015 by Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
+import functools
 import operator
 import sentry_slack
 
@@ -118,7 +119,7 @@ class SlackPlugin(notify.NotificationPlugin):
         value_labels = {
             (o.key, o.value): o.get_label()
             for o in TagValue.objects.filter(
-                reduce(operator.or_, (Q(key=k, value=v) for k, v in tag_list)),
+                functools.reduce(operator.or_, (Q(key=k, value=v) for k, v in tag_list)),
                 project=event.project,
             )
         }
